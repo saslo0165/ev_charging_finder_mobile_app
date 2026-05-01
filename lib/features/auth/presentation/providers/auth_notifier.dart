@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../domain/usecases/register_usecase.dart';
 import '../../domain/usecases/login_usecase.dart';
@@ -35,7 +36,7 @@ class AuthNotifier extends _$AuthNotifier {
       // 2. CHECK MOUNTED after every await
       if (!ref.mounted) return;
       
-      print('DEBUG: Restoring session, token found: ${token != null}');
+      debugPrint('DEBUG: Restoring session, token found: ${token != null}');
       
       if (token != null) {
         // Use the captured useCase instead of ref.read again
@@ -46,20 +47,20 @@ class AuthNotifier extends _$AuthNotifier {
         state = result.fold(
           (failure) {
             storage.removeToken();
-            print('DEBUG: Restoration failed via API: ${failure.message}');
+            debugPrint('DEBUG: Restoration failed via API: ${failure.message}');
             return AsyncData(AuthState.error(message: failure.message));
           },
           (user) {
-            print('DEBUG: Restoration success for: ${user.fullName}');
+            debugPrint('DEBUG: Restoration success for: ${user.fullName}');
             return AsyncData(AuthState.authenticated(user: user));
           },
         );
       } else {
-        print('DEBUG: No token found, setting state to initial');
+        debugPrint('DEBUG: No token found, setting state to initial');
         state = const AsyncData(AuthState.initial());
       }
     } catch (e) {
-      print('DEBUG: Session restoration exception: $e');
+      debugPrint('DEBUG: Session restoration exception: $e');
       if (ref.mounted) {
         state = const AsyncData(AuthState.initial());
       }

@@ -44,7 +44,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerPr
     // 1. Minimum delay for branding (logo visibility)
     final minDelay = Future.delayed(const Duration(seconds: 2));
 
-    print('DEBUG: SplashScreen waiting for auth state...');
+    debugPrint('DEBUG: SplashScreen waiting for auth state...');
     // 2. Wait for auth state to stop being loading (restoration complete)
     // We poll with a timeout (10 seconds) to prevent hanging
     int attempts = 0;
@@ -54,16 +54,16 @@ class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerPr
     }
 
     final authState = ref.read(authProvider).value;
-    print('DEBUG: SplashScreen auth state ready: $authState after ${attempts * 100}ms');
+    debugPrint('DEBUG: SplashScreen auth state ready: $authState after ${attempts * 100}ms');
 
     await minDelay;
 
     if (mounted) {
       if (authState is AuthAuthenticated) {
-        print('DEBUG: Navigating to Home');
+        debugPrint('DEBUG: Navigating to Home');
         context.go('/');
       } else {
-        print('DEBUG: Navigating to Onboarding (State: $authState)');
+        debugPrint('DEBUG: Navigating to Onboarding (State: $authState)');
         context.go('/onboarding');
       }
     }

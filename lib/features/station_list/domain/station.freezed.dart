@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Station {
 
- String get id; String get name; String get address; double get latitude; double get longitude; double get distanceKm; int get availableConnectors; int get totalConnectors; double get maxPowerKw; String get providerName; bool get isFavorite; bool get isWorking;
+ String get id; String get name; String get description; String get address; double get latitude; double get longitude; String get city; String get state; String get country; List<String> get connectorTypes; String get chargingSpeed; int get totalPorts; int get availablePorts; String get status; double get distanceKm; String get providerName; double get maxPowerKw; bool get isFavorite; bool get isPublic; String get accessType; int? get verifiedBy; String? get pricingInfo; String? get workingHours; List<String> get photos;
 /// Create a copy of Station
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $StationCopyWith<Station> get copyWith => _$StationCopyWithImpl<Station>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Station&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.address, address) || other.address == address)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.distanceKm, distanceKm) || other.distanceKm == distanceKm)&&(identical(other.availableConnectors, availableConnectors) || other.availableConnectors == availableConnectors)&&(identical(other.totalConnectors, totalConnectors) || other.totalConnectors == totalConnectors)&&(identical(other.maxPowerKw, maxPowerKw) || other.maxPowerKw == maxPowerKw)&&(identical(other.providerName, providerName) || other.providerName == providerName)&&(identical(other.isFavorite, isFavorite) || other.isFavorite == isFavorite)&&(identical(other.isWorking, isWorking) || other.isWorking == isWorking));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Station&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.address, address) || other.address == address)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.city, city) || other.city == city)&&(identical(other.state, state) || other.state == state)&&(identical(other.country, country) || other.country == country)&&const DeepCollectionEquality().equals(other.connectorTypes, connectorTypes)&&(identical(other.chargingSpeed, chargingSpeed) || other.chargingSpeed == chargingSpeed)&&(identical(other.totalPorts, totalPorts) || other.totalPorts == totalPorts)&&(identical(other.availablePorts, availablePorts) || other.availablePorts == availablePorts)&&(identical(other.status, status) || other.status == status)&&(identical(other.distanceKm, distanceKm) || other.distanceKm == distanceKm)&&(identical(other.providerName, providerName) || other.providerName == providerName)&&(identical(other.maxPowerKw, maxPowerKw) || other.maxPowerKw == maxPowerKw)&&(identical(other.isFavorite, isFavorite) || other.isFavorite == isFavorite)&&(identical(other.isPublic, isPublic) || other.isPublic == isPublic)&&(identical(other.accessType, accessType) || other.accessType == accessType)&&(identical(other.verifiedBy, verifiedBy) || other.verifiedBy == verifiedBy)&&(identical(other.pricingInfo, pricingInfo) || other.pricingInfo == pricingInfo)&&(identical(other.workingHours, workingHours) || other.workingHours == workingHours)&&const DeepCollectionEquality().equals(other.photos, photos));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,address,latitude,longitude,distanceKm,availableConnectors,totalConnectors,maxPowerKw,providerName,isFavorite,isWorking);
+int get hashCode => Object.hashAll([runtimeType,id,name,description,address,latitude,longitude,city,state,country,const DeepCollectionEquality().hash(connectorTypes),chargingSpeed,totalPorts,availablePorts,status,distanceKm,providerName,maxPowerKw,isFavorite,isPublic,accessType,verifiedBy,pricingInfo,workingHours,const DeepCollectionEquality().hash(photos)]);
 
 @override
 String toString() {
-  return 'Station(id: $id, name: $name, address: $address, latitude: $latitude, longitude: $longitude, distanceKm: $distanceKm, availableConnectors: $availableConnectors, totalConnectors: $totalConnectors, maxPowerKw: $maxPowerKw, providerName: $providerName, isFavorite: $isFavorite, isWorking: $isWorking)';
+  return 'Station(id: $id, name: $name, description: $description, address: $address, latitude: $latitude, longitude: $longitude, city: $city, state: $state, country: $country, connectorTypes: $connectorTypes, chargingSpeed: $chargingSpeed, totalPorts: $totalPorts, availablePorts: $availablePorts, status: $status, distanceKm: $distanceKm, providerName: $providerName, maxPowerKw: $maxPowerKw, isFavorite: $isFavorite, isPublic: $isPublic, accessType: $accessType, verifiedBy: $verifiedBy, pricingInfo: $pricingInfo, workingHours: $workingHours, photos: $photos)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $StationCopyWith<$Res>  {
   factory $StationCopyWith(Station value, $Res Function(Station) _then) = _$StationCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String address, double latitude, double longitude, double distanceKm, int availableConnectors, int totalConnectors, double maxPowerKw, String providerName, bool isFavorite, bool isWorking
+ String id, String name, String description, String address, double latitude, double longitude, String city, String state, String country, List<String> connectorTypes, String chargingSpeed, int totalPorts, int availablePorts, String status, double distanceKm, String providerName, double maxPowerKw, bool isFavorite, bool isPublic, String accessType, int? verifiedBy, String? pricingInfo, String? workingHours, List<String> photos
 });
 
 
@@ -65,21 +65,33 @@ class _$StationCopyWithImpl<$Res>
 
 /// Create a copy of Station
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? address = null,Object? latitude = null,Object? longitude = null,Object? distanceKm = null,Object? availableConnectors = null,Object? totalConnectors = null,Object? maxPowerKw = null,Object? providerName = null,Object? isFavorite = null,Object? isWorking = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? description = null,Object? address = null,Object? latitude = null,Object? longitude = null,Object? city = null,Object? state = null,Object? country = null,Object? connectorTypes = null,Object? chargingSpeed = null,Object? totalPorts = null,Object? availablePorts = null,Object? status = null,Object? distanceKm = null,Object? providerName = null,Object? maxPowerKw = null,Object? isFavorite = null,Object? isPublic = null,Object? accessType = null,Object? verifiedBy = freezed,Object? pricingInfo = freezed,Object? workingHours = freezed,Object? photos = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
 as String,latitude: null == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
 as double,longitude: null == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
-as double,distanceKm: null == distanceKm ? _self.distanceKm : distanceKm // ignore: cast_nullable_to_non_nullable
-as double,availableConnectors: null == availableConnectors ? _self.availableConnectors : availableConnectors // ignore: cast_nullable_to_non_nullable
-as int,totalConnectors: null == totalConnectors ? _self.totalConnectors : totalConnectors // ignore: cast_nullable_to_non_nullable
-as int,maxPowerKw: null == maxPowerKw ? _self.maxPowerKw : maxPowerKw // ignore: cast_nullable_to_non_nullable
+as double,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String,state: null == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
+as String,country: null == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
+as String,connectorTypes: null == connectorTypes ? _self.connectorTypes : connectorTypes // ignore: cast_nullable_to_non_nullable
+as List<String>,chargingSpeed: null == chargingSpeed ? _self.chargingSpeed : chargingSpeed // ignore: cast_nullable_to_non_nullable
+as String,totalPorts: null == totalPorts ? _self.totalPorts : totalPorts // ignore: cast_nullable_to_non_nullable
+as int,availablePorts: null == availablePorts ? _self.availablePorts : availablePorts // ignore: cast_nullable_to_non_nullable
+as int,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,distanceKm: null == distanceKm ? _self.distanceKm : distanceKm // ignore: cast_nullable_to_non_nullable
 as double,providerName: null == providerName ? _self.providerName : providerName // ignore: cast_nullable_to_non_nullable
-as String,isFavorite: null == isFavorite ? _self.isFavorite : isFavorite // ignore: cast_nullable_to_non_nullable
-as bool,isWorking: null == isWorking ? _self.isWorking : isWorking // ignore: cast_nullable_to_non_nullable
-as bool,
+as String,maxPowerKw: null == maxPowerKw ? _self.maxPowerKw : maxPowerKw // ignore: cast_nullable_to_non_nullable
+as double,isFavorite: null == isFavorite ? _self.isFavorite : isFavorite // ignore: cast_nullable_to_non_nullable
+as bool,isPublic: null == isPublic ? _self.isPublic : isPublic // ignore: cast_nullable_to_non_nullable
+as bool,accessType: null == accessType ? _self.accessType : accessType // ignore: cast_nullable_to_non_nullable
+as String,verifiedBy: freezed == verifiedBy ? _self.verifiedBy : verifiedBy // ignore: cast_nullable_to_non_nullable
+as int?,pricingInfo: freezed == pricingInfo ? _self.pricingInfo : pricingInfo // ignore: cast_nullable_to_non_nullable
+as String?,workingHours: freezed == workingHours ? _self.workingHours : workingHours // ignore: cast_nullable_to_non_nullable
+as String?,photos: null == photos ? _self.photos : photos // ignore: cast_nullable_to_non_nullable
+as List<String>,
   ));
 }
 
@@ -164,10 +176,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String address,  double latitude,  double longitude,  double distanceKm,  int availableConnectors,  int totalConnectors,  double maxPowerKw,  String providerName,  bool isFavorite,  bool isWorking)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String description,  String address,  double latitude,  double longitude,  String city,  String state,  String country,  List<String> connectorTypes,  String chargingSpeed,  int totalPorts,  int availablePorts,  String status,  double distanceKm,  String providerName,  double maxPowerKw,  bool isFavorite,  bool isPublic,  String accessType,  int? verifiedBy,  String? pricingInfo,  String? workingHours,  List<String> photos)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Station() when $default != null:
-return $default(_that.id,_that.name,_that.address,_that.latitude,_that.longitude,_that.distanceKm,_that.availableConnectors,_that.totalConnectors,_that.maxPowerKw,_that.providerName,_that.isFavorite,_that.isWorking);case _:
+return $default(_that.id,_that.name,_that.description,_that.address,_that.latitude,_that.longitude,_that.city,_that.state,_that.country,_that.connectorTypes,_that.chargingSpeed,_that.totalPorts,_that.availablePorts,_that.status,_that.distanceKm,_that.providerName,_that.maxPowerKw,_that.isFavorite,_that.isPublic,_that.accessType,_that.verifiedBy,_that.pricingInfo,_that.workingHours,_that.photos);case _:
   return orElse();
 
 }
@@ -185,10 +197,10 @@ return $default(_that.id,_that.name,_that.address,_that.latitude,_that.longitude
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String address,  double latitude,  double longitude,  double distanceKm,  int availableConnectors,  int totalConnectors,  double maxPowerKw,  String providerName,  bool isFavorite,  bool isWorking)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String description,  String address,  double latitude,  double longitude,  String city,  String state,  String country,  List<String> connectorTypes,  String chargingSpeed,  int totalPorts,  int availablePorts,  String status,  double distanceKm,  String providerName,  double maxPowerKw,  bool isFavorite,  bool isPublic,  String accessType,  int? verifiedBy,  String? pricingInfo,  String? workingHours,  List<String> photos)  $default,) {final _that = this;
 switch (_that) {
 case _Station():
-return $default(_that.id,_that.name,_that.address,_that.latitude,_that.longitude,_that.distanceKm,_that.availableConnectors,_that.totalConnectors,_that.maxPowerKw,_that.providerName,_that.isFavorite,_that.isWorking);case _:
+return $default(_that.id,_that.name,_that.description,_that.address,_that.latitude,_that.longitude,_that.city,_that.state,_that.country,_that.connectorTypes,_that.chargingSpeed,_that.totalPorts,_that.availablePorts,_that.status,_that.distanceKm,_that.providerName,_that.maxPowerKw,_that.isFavorite,_that.isPublic,_that.accessType,_that.verifiedBy,_that.pricingInfo,_that.workingHours,_that.photos);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -205,10 +217,10 @@ return $default(_that.id,_that.name,_that.address,_that.latitude,_that.longitude
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String address,  double latitude,  double longitude,  double distanceKm,  int availableConnectors,  int totalConnectors,  double maxPowerKw,  String providerName,  bool isFavorite,  bool isWorking)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String description,  String address,  double latitude,  double longitude,  String city,  String state,  String country,  List<String> connectorTypes,  String chargingSpeed,  int totalPorts,  int availablePorts,  String status,  double distanceKm,  String providerName,  double maxPowerKw,  bool isFavorite,  bool isPublic,  String accessType,  int? verifiedBy,  String? pricingInfo,  String? workingHours,  List<String> photos)?  $default,) {final _that = this;
 switch (_that) {
 case _Station() when $default != null:
-return $default(_that.id,_that.name,_that.address,_that.latitude,_that.longitude,_that.distanceKm,_that.availableConnectors,_that.totalConnectors,_that.maxPowerKw,_that.providerName,_that.isFavorite,_that.isWorking);case _:
+return $default(_that.id,_that.name,_that.description,_that.address,_that.latitude,_that.longitude,_that.city,_that.state,_that.country,_that.connectorTypes,_that.chargingSpeed,_that.totalPorts,_that.availablePorts,_that.status,_that.distanceKm,_that.providerName,_that.maxPowerKw,_that.isFavorite,_that.isPublic,_that.accessType,_that.verifiedBy,_that.pricingInfo,_that.workingHours,_that.photos);case _:
   return null;
 
 }
@@ -220,21 +232,45 @@ return $default(_that.id,_that.name,_that.address,_that.latitude,_that.longitude
 @JsonSerializable()
 
 class _Station implements Station {
-  const _Station({required this.id, required this.name, required this.address, required this.latitude, required this.longitude, required this.distanceKm, required this.availableConnectors, required this.totalConnectors, required this.maxPowerKw, required this.providerName, this.isFavorite = false, this.isWorking = true});
+  const _Station({required this.id, required this.name, this.description = '', required this.address, required this.latitude, required this.longitude, required this.city, required this.state, required this.country, required final  List<String> connectorTypes, required this.chargingSpeed, required this.totalPorts, required this.availablePorts, required this.status, required this.distanceKm, required this.providerName, required this.maxPowerKw, this.isFavorite = false, this.isPublic = true, this.accessType = 'public', this.verifiedBy, this.pricingInfo, this.workingHours, final  List<String> photos = const []}): _connectorTypes = connectorTypes,_photos = photos;
   factory _Station.fromJson(Map<String, dynamic> json) => _$StationFromJson(json);
 
 @override final  String id;
 @override final  String name;
+@override@JsonKey() final  String description;
 @override final  String address;
 @override final  double latitude;
 @override final  double longitude;
+@override final  String city;
+@override final  String state;
+@override final  String country;
+ final  List<String> _connectorTypes;
+@override List<String> get connectorTypes {
+  if (_connectorTypes is EqualUnmodifiableListView) return _connectorTypes;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_connectorTypes);
+}
+
+@override final  String chargingSpeed;
+@override final  int totalPorts;
+@override final  int availablePorts;
+@override final  String status;
 @override final  double distanceKm;
-@override final  int availableConnectors;
-@override final  int totalConnectors;
-@override final  double maxPowerKw;
 @override final  String providerName;
+@override final  double maxPowerKw;
 @override@JsonKey() final  bool isFavorite;
-@override@JsonKey() final  bool isWorking;
+@override@JsonKey() final  bool isPublic;
+@override@JsonKey() final  String accessType;
+@override final  int? verifiedBy;
+@override final  String? pricingInfo;
+@override final  String? workingHours;
+ final  List<String> _photos;
+@override@JsonKey() List<String> get photos {
+  if (_photos is EqualUnmodifiableListView) return _photos;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_photos);
+}
+
 
 /// Create a copy of Station
 /// with the given fields replaced by the non-null parameter values.
@@ -249,16 +285,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Station&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.address, address) || other.address == address)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.distanceKm, distanceKm) || other.distanceKm == distanceKm)&&(identical(other.availableConnectors, availableConnectors) || other.availableConnectors == availableConnectors)&&(identical(other.totalConnectors, totalConnectors) || other.totalConnectors == totalConnectors)&&(identical(other.maxPowerKw, maxPowerKw) || other.maxPowerKw == maxPowerKw)&&(identical(other.providerName, providerName) || other.providerName == providerName)&&(identical(other.isFavorite, isFavorite) || other.isFavorite == isFavorite)&&(identical(other.isWorking, isWorking) || other.isWorking == isWorking));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Station&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.address, address) || other.address == address)&&(identical(other.latitude, latitude) || other.latitude == latitude)&&(identical(other.longitude, longitude) || other.longitude == longitude)&&(identical(other.city, city) || other.city == city)&&(identical(other.state, state) || other.state == state)&&(identical(other.country, country) || other.country == country)&&const DeepCollectionEquality().equals(other._connectorTypes, _connectorTypes)&&(identical(other.chargingSpeed, chargingSpeed) || other.chargingSpeed == chargingSpeed)&&(identical(other.totalPorts, totalPorts) || other.totalPorts == totalPorts)&&(identical(other.availablePorts, availablePorts) || other.availablePorts == availablePorts)&&(identical(other.status, status) || other.status == status)&&(identical(other.distanceKm, distanceKm) || other.distanceKm == distanceKm)&&(identical(other.providerName, providerName) || other.providerName == providerName)&&(identical(other.maxPowerKw, maxPowerKw) || other.maxPowerKw == maxPowerKw)&&(identical(other.isFavorite, isFavorite) || other.isFavorite == isFavorite)&&(identical(other.isPublic, isPublic) || other.isPublic == isPublic)&&(identical(other.accessType, accessType) || other.accessType == accessType)&&(identical(other.verifiedBy, verifiedBy) || other.verifiedBy == verifiedBy)&&(identical(other.pricingInfo, pricingInfo) || other.pricingInfo == pricingInfo)&&(identical(other.workingHours, workingHours) || other.workingHours == workingHours)&&const DeepCollectionEquality().equals(other._photos, _photos));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,address,latitude,longitude,distanceKm,availableConnectors,totalConnectors,maxPowerKw,providerName,isFavorite,isWorking);
+int get hashCode => Object.hashAll([runtimeType,id,name,description,address,latitude,longitude,city,state,country,const DeepCollectionEquality().hash(_connectorTypes),chargingSpeed,totalPorts,availablePorts,status,distanceKm,providerName,maxPowerKw,isFavorite,isPublic,accessType,verifiedBy,pricingInfo,workingHours,const DeepCollectionEquality().hash(_photos)]);
 
 @override
 String toString() {
-  return 'Station(id: $id, name: $name, address: $address, latitude: $latitude, longitude: $longitude, distanceKm: $distanceKm, availableConnectors: $availableConnectors, totalConnectors: $totalConnectors, maxPowerKw: $maxPowerKw, providerName: $providerName, isFavorite: $isFavorite, isWorking: $isWorking)';
+  return 'Station(id: $id, name: $name, description: $description, address: $address, latitude: $latitude, longitude: $longitude, city: $city, state: $state, country: $country, connectorTypes: $connectorTypes, chargingSpeed: $chargingSpeed, totalPorts: $totalPorts, availablePorts: $availablePorts, status: $status, distanceKm: $distanceKm, providerName: $providerName, maxPowerKw: $maxPowerKw, isFavorite: $isFavorite, isPublic: $isPublic, accessType: $accessType, verifiedBy: $verifiedBy, pricingInfo: $pricingInfo, workingHours: $workingHours, photos: $photos)';
 }
 
 
@@ -269,7 +305,7 @@ abstract mixin class _$StationCopyWith<$Res> implements $StationCopyWith<$Res> {
   factory _$StationCopyWith(_Station value, $Res Function(_Station) _then) = __$StationCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String address, double latitude, double longitude, double distanceKm, int availableConnectors, int totalConnectors, double maxPowerKw, String providerName, bool isFavorite, bool isWorking
+ String id, String name, String description, String address, double latitude, double longitude, String city, String state, String country, List<String> connectorTypes, String chargingSpeed, int totalPorts, int availablePorts, String status, double distanceKm, String providerName, double maxPowerKw, bool isFavorite, bool isPublic, String accessType, int? verifiedBy, String? pricingInfo, String? workingHours, List<String> photos
 });
 
 
@@ -286,21 +322,33 @@ class __$StationCopyWithImpl<$Res>
 
 /// Create a copy of Station
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? address = null,Object? latitude = null,Object? longitude = null,Object? distanceKm = null,Object? availableConnectors = null,Object? totalConnectors = null,Object? maxPowerKw = null,Object? providerName = null,Object? isFavorite = null,Object? isWorking = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? description = null,Object? address = null,Object? latitude = null,Object? longitude = null,Object? city = null,Object? state = null,Object? country = null,Object? connectorTypes = null,Object? chargingSpeed = null,Object? totalPorts = null,Object? availablePorts = null,Object? status = null,Object? distanceKm = null,Object? providerName = null,Object? maxPowerKw = null,Object? isFavorite = null,Object? isPublic = null,Object? accessType = null,Object? verifiedBy = freezed,Object? pricingInfo = freezed,Object? workingHours = freezed,Object? photos = null,}) {
   return _then(_Station(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
 as String,latitude: null == latitude ? _self.latitude : latitude // ignore: cast_nullable_to_non_nullable
 as double,longitude: null == longitude ? _self.longitude : longitude // ignore: cast_nullable_to_non_nullable
-as double,distanceKm: null == distanceKm ? _self.distanceKm : distanceKm // ignore: cast_nullable_to_non_nullable
-as double,availableConnectors: null == availableConnectors ? _self.availableConnectors : availableConnectors // ignore: cast_nullable_to_non_nullable
-as int,totalConnectors: null == totalConnectors ? _self.totalConnectors : totalConnectors // ignore: cast_nullable_to_non_nullable
-as int,maxPowerKw: null == maxPowerKw ? _self.maxPowerKw : maxPowerKw // ignore: cast_nullable_to_non_nullable
+as double,city: null == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
+as String,state: null == state ? _self.state : state // ignore: cast_nullable_to_non_nullable
+as String,country: null == country ? _self.country : country // ignore: cast_nullable_to_non_nullable
+as String,connectorTypes: null == connectorTypes ? _self._connectorTypes : connectorTypes // ignore: cast_nullable_to_non_nullable
+as List<String>,chargingSpeed: null == chargingSpeed ? _self.chargingSpeed : chargingSpeed // ignore: cast_nullable_to_non_nullable
+as String,totalPorts: null == totalPorts ? _self.totalPorts : totalPorts // ignore: cast_nullable_to_non_nullable
+as int,availablePorts: null == availablePorts ? _self.availablePorts : availablePorts // ignore: cast_nullable_to_non_nullable
+as int,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,distanceKm: null == distanceKm ? _self.distanceKm : distanceKm // ignore: cast_nullable_to_non_nullable
 as double,providerName: null == providerName ? _self.providerName : providerName // ignore: cast_nullable_to_non_nullable
-as String,isFavorite: null == isFavorite ? _self.isFavorite : isFavorite // ignore: cast_nullable_to_non_nullable
-as bool,isWorking: null == isWorking ? _self.isWorking : isWorking // ignore: cast_nullable_to_non_nullable
-as bool,
+as String,maxPowerKw: null == maxPowerKw ? _self.maxPowerKw : maxPowerKw // ignore: cast_nullable_to_non_nullable
+as double,isFavorite: null == isFavorite ? _self.isFavorite : isFavorite // ignore: cast_nullable_to_non_nullable
+as bool,isPublic: null == isPublic ? _self.isPublic : isPublic // ignore: cast_nullable_to_non_nullable
+as bool,accessType: null == accessType ? _self.accessType : accessType // ignore: cast_nullable_to_non_nullable
+as String,verifiedBy: freezed == verifiedBy ? _self.verifiedBy : verifiedBy // ignore: cast_nullable_to_non_nullable
+as int?,pricingInfo: freezed == pricingInfo ? _self.pricingInfo : pricingInfo // ignore: cast_nullable_to_non_nullable
+as String?,workingHours: freezed == workingHours ? _self.workingHours : workingHours // ignore: cast_nullable_to_non_nullable
+as String?,photos: null == photos ? _self._photos : photos // ignore: cast_nullable_to_non_nullable
+as List<String>,
   ));
 }
 

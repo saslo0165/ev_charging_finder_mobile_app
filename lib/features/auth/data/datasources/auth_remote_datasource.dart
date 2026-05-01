@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import '../../../../core/error/failures.dart';
 import '../models/user_model.dart';
@@ -164,7 +165,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<UserModel> getMe(String token) async {
     try {
-      print('DEBUG: API Request: GET /auth/me');
+      debugPrint('DEBUG: API Request: GET /auth/me');
       final response = await _dio.get(
         '/auth/me',
         options: Options(
@@ -173,7 +174,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           },
         ),
       );
-      print('DEBUG: API Response Status: ${response.statusCode}');
+      debugPrint('DEBUG: API Response Status: ${response.statusCode}');
 
       final data = response.data;
       if (data == null || data is! Map) {

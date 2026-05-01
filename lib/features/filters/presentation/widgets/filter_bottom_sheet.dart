@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/gap.dart';
 
 class FilterBottomSheet extends StatefulWidget {
@@ -24,30 +25,53 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   bool _available247 = false;
   int _selectedChargingLevel = 0;
   final Set<String> _selectedConnectors = {'Type 2'};
+  final Set<String> _selectedAmenities = {};
+
+  final List<Map<String, dynamic>> _amenities = [
+    {'name': 'Cafe', 'icon': Icons.coffee_rounded},
+    {'name': 'Parking', 'icon': Icons.local_parking_rounded},
+    {'name': 'Restroom', 'icon': Icons.wc_rounded},
+    {'name': 'Shopping', 'icon': Icons.shopping_bag_rounded},
+    {'name': 'WiFi', 'icon': Icons.wifi_rounded},
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.85,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      height: MediaQuery.of(context).size.height * 0.8,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
       ),
       child: Column(
         children: [
+          _buildHandle(),
           _buildHeader(context),
           Expanded(
             child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.pageHorizontalPadding),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildConnectorSection(),
+                  _buildSectionHeader('Connectors'),
+                  Gap.h16,
+                  _buildConnectorGrid(),
                   _buildDivider(),
-                  _buildStatusSection(),
+                  _buildSectionHeader('Stations status'),
+                  Gap.h12,
+                  _buildSwitchRow('Available now', _availableNow, (v) => setState(() => _availableNow = v)),
+                  _buildSwitchRow('Available 24/7', _available247, (v) => setState(() => _available247 = v)),
                   _buildDivider(),
-                  _buildChargingLevelSection(),
+                  _buildSectionHeader('Charging Level'),
+                  Gap.h12,
+                  _buildRadioRow('Level 1 AC (1.4 kW - 2.0 kW)', 0),
+                  _buildRadioRow('Level 2 AC (3.3 kW - 19.2 kW)', 1),
+                  _buildRadioRow('Level 3 DC (50 kW - 350 kW)', 2),
                   _buildDivider(),
-                  _buildAmenitiesSection(),
+                  _buildSectionHeader('Amenities'),
+                  Gap.h16,
+                  _buildAmenitiesList(),
+                  Gap.h32,
                 ],
               ),
             ),
@@ -58,24 +82,31 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     );
   }
 
+  Widget _buildHandle() {
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 12),
+        width: 40,
+        height: 4,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.3),
+          borderRadius: BorderRadius.circular(2),
+        ),
+      ),
+    );
+  }
+
   Widget _buildHeader(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppColors.primary),
-            onPressed: () => Navigator.pop(context),
-          ),
-          const Expanded(
-            child: Text(
-              'Filters',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-              textAlign: TextAlign.center,
+          Text(
+            'Filters',
+            style: AppTypography.titleLarge.copyWith(
+              fontWeight: FontWeight.w800,
+              fontSize: 22,
             ),
           ),
           TextButton(
@@ -85,11 +116,15 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                 _available247 = false;
                 _selectedChargingLevel = 0;
                 _selectedConnectors.clear();
+                _selectedAmenities.clear();
               });
             },
-            child: const Text(
-              'Clear all',
-              style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600),
+            child: Text(
+              'Reset all',
+              style: AppTypography.bodyMedium.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ],
@@ -97,136 +132,178 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     );
   }
 
-  Widget _buildConnectorSection() {
-    return Padding(
-      padding: const EdgeInsets.all(AppDimensions.pageHorizontalPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Connectors', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          Gap.h16,
-          Row(
-            children: [
-              _ConnectorChip(
-                label: 'Type 2',
-                power: '30 KW',
-                isSelected: _selectedConnectors.contains('Type 2'),
-                onTap: () => _toggleConnector('Type 2'),
-              ),
-              Gap.w12,
-              _ConnectorChip(
-                label: 'CCS 2',
-                power: '30 KW',
-                isSelected: _selectedConnectors.contains('CCS 2'),
-                onTap: () => _toggleConnector('CCS 2'),
-              ),
-            ],
+  Widget _buildSectionHeader(String title) {
+    return Text(
+      title,
+      style: AppTypography.bodyLarge.copyWith(
+        fontWeight: FontWeight.w800,
+        fontSize: 17,
+      ),
+    );
+  }
+
+  Widget _buildConnectorGrid() {
+    return Wrap(
+      spacing: 12,
+      runSpacing: 12,
+      children: [
+        _ConnectorChip(
+          label: 'Type 2',
+          power: '30 KW',
+          isSelected: _selectedConnectors.contains('Type 2'),
+          onTap: () => _toggleConnector('Type 2'),
+        ),
+        _ConnectorChip(
+          label: 'CCS 2',
+          power: '30 KW',
+          isSelected: _selectedConnectors.contains('CCS 2'),
+          onTap: () => _toggleConnector('CCS 2'),
+        ),
+        _ConnectorChip(
+          label: 'CHADEMO',
+          power: '50 KW',
+          isSelected: _selectedConnectors.contains('CHADEMO'),
+          onTap: () => _toggleConnector('CHADEMO'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAmenitiesList() {
+    return Wrap(
+      spacing: 12,
+      runSpacing: 12,
+      children: _amenities.map((amenity) {
+        final isSelected = _selectedAmenities.contains(amenity['name']);
+        return FilterChip(
+          label: Text(amenity['name']),
+          avatar: Icon(
+            amenity['icon'],
+            size: 18,
+            color: isSelected ? Colors.white : AppColors.onSurfaceVariant,
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatusSection() {
-    return Padding(
-      padding: const EdgeInsets.all(AppDimensions.pageHorizontalPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Stations status', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          Gap.h12,
-          _buildSwitchRow('Available now', _availableNow, (v) => setState(() => _availableNow = v)),
-          _buildSwitchRow('Available 24/7', _available247, (v) => setState(() => _available247 = v)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildChargingLevelSection() {
-    return Padding(
-      padding: const EdgeInsets.all(AppDimensions.pageHorizontalPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Charging Level', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          Gap.h12,
-          _buildRadioRow('Level 1 AC (1.4 kW - 2.0 kW)', 0),
-          _buildRadioRow('Level 2 AC (3.3 kW - 19.2 kW)', 1),
-          _buildRadioRow('Level 3 DC (50 kW - 350 kW)', 2),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAmenitiesSection() {
-    return Padding(
-      padding: const EdgeInsets.all(AppDimensions.pageHorizontalPadding),
-      child: const Text('Amenities', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          selected: isSelected,
+          onSelected: (selected) {
+            setState(() {
+              if (selected) {
+                _selectedAmenities.add(amenity['name']);
+              } else {
+                _selectedAmenities.remove(amenity['name']);
+              }
+            });
+          },
+          selectedColor: AppColors.primary,
+          checkmarkColor: Colors.white,
+          labelStyle: TextStyle(
+            color: isSelected ? Colors.white : AppColors.onSurfaceVariant,
+            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: BorderSide(
+              color: isSelected ? AppColors.primary : AppColors.outline.withValues(alpha: 0.2),
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 
   Widget _buildFooter() {
-    return Padding(
-      padding: const EdgeInsets.all(AppDimensions.pageHorizontalPadding),
-      child: SizedBox(
-        width: double.infinity,
-        height: 56,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    return Container(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        border: Border(
+          top: BorderSide(
+            color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.05),
           ),
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Show 34 results', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        ),
+      ),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          minimumSize: const Size(double.infinity, 56),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          elevation: 0,
+        ),
+        onPressed: () => Navigator.pop(context),
+        child: Text(
+          'Show 34 results',
+          style: AppTypography.bodyLarge.copyWith(
+            fontWeight: FontWeight.w800,
+            color: Colors.white,
+          ),
         ),
       ),
     );
   }
 
   Widget _buildSwitchRow(String label, bool value, ValueChanged<bool> onChanged) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label, style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 15)),
-        Switch(
-          value: value,
-          onChanged: onChanged,
-          activeThumbColor: AppColors.primary,
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.onSurfaceVariant,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          Switch.adaptive(
+            value: value,
+            onChanged: onChanged,
+            activeTrackColor: AppColors.primary,
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildRadioRow(String label, int value) {
-    return GestureDetector(
+    final isSelected = _selectedChargingLevel == value;
+    return InkWell(
       onTap: () => setState(() => _selectedChargingLevel = value),
+      borderRadius: BorderRadius.circular(12),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         child: Row(
           children: [
             Container(
-              width: 20,
-              height: 20,
+              width: 22,
+              height: 22,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: _selectedChargingLevel == value ? AppColors.primary : AppColors.outline,
+                  color: isSelected ? AppColors.primary : AppColors.outline.withValues(alpha: 0.3),
                   width: 2,
                 ),
               ),
-              child: _selectedChargingLevel == value
+              child: isSelected
                   ? Center(
                       child: Container(
-                        width: 10,
-                        height: 10,
-                        decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
+                        width: 12,
+                        height: 12,
+                        decoration: const BoxDecoration(
+                          color: AppColors.primary,
+                          shape: BoxShape.circle,
+                        ),
                       ),
                     )
                   : null,
             ),
-            Gap.w12,
-            Text(label, style: TextStyle(color: AppColors.onSurfaceVariant, fontSize: 14)),
+            Gap.w16,
+            Text(
+              label,
+              style: AppTypography.bodyMedium.copyWith(
+                color: isSelected ? AppColors.onSurface : AppColors.onSurfaceVariant,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+              ),
+            ),
           ],
         ),
       ),
@@ -234,7 +311,13 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   }
 
   Widget _buildDivider() {
-    return Container(height: 8, color: AppColors.surface);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 24),
+      child: Divider(
+        height: 1,
+        color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.08),
+      ),
+    );
   }
 
   void _toggleConnector(String type) {
@@ -266,27 +349,40 @@ class _ConnectorChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 130,
-        padding: const EdgeInsets.all(12),
+        width: (MediaQuery.of(context).size.width - 60) / 2,
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          color: isSelected 
+              ? AppColors.primary.withValues(alpha: 0.05) 
+              : Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.outline,
+            color: isSelected ? AppColors.primary : AppColors.outline.withValues(alpha: 0.15),
             width: 1.5,
           ),
         ),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(Icons.settings_input_component_rounded, size: 24, color: Colors.grey),
-            Gap.w8,
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                Text(power, style: const TextStyle(color: Colors.grey, fontSize: 12)),
-              ],
+            Icon(
+              Icons.ev_station_rounded,
+              size: 28,
+              color: isSelected ? AppColors.primary : AppColors.onSurfaceVariant.withValues(alpha: 0.5),
+            ),
+            Gap.h12,
+            Text(
+              label,
+              style: AppTypography.bodyMedium.copyWith(
+                fontWeight: FontWeight.w800,
+                color: isSelected ? AppColors.primary : AppColors.onSurface,
+              ),
+            ),
+            Text(
+              power,
+              style: AppTypography.bodySmall.copyWith(
+                color: AppColors.onSurfaceVariant,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         ),

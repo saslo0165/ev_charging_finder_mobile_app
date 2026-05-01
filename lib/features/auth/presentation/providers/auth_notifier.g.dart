@@ -50,7 +50,7 @@ final class AuthNotifierProvider
   }
 }
 
-String _$authNotifierHash() => r'4ec666478488da5b6cb495602b8b69f3966338bd';
+String _$authNotifierHash() => r'7c67efb6582286f268e4e39539dc1ab8679d0fd2';
 
 /// Provides [AuthNotifier] — reads use-cases from the provider graph.
 /// In tests, override [authRepositoryProvider] to inject a mock repository,

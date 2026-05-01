@@ -17,8 +17,8 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  final _emailController = TextEditingController(text: 'montu@yopmail.com');
-  final _passwordController = TextEditingController(text: 'Test@123');
+  final _emailController = TextEditingController(text: 'admin@admin.com');
+  final _passwordController = TextEditingController(text: 'password123');
 
   bool get _isEmailValid => RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_emailController.text.trim());
   bool get _isPasswordValid => _passwordController.text.length >= 6;
